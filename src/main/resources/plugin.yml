@@ -1,0 +1,7 @@
+name: SpecialWolves
+main: Main
+version: 1
+commands:
+    wolf:
+      description: Spawns a Special Wolf.
+      usage: /<command>

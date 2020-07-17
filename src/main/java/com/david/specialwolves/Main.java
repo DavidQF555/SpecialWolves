@@ -1,3 +1,4 @@
+package com.david.specialwolves;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -278,7 +279,6 @@ public class Main extends JavaPlugin implements Listener {
 		teleport.setCustomNameVisible(false);
 	}
 
-	@SuppressWarnings("deprecation")
 	public void spawnDragonWolf(Main plugin, Entity entity) {
 		Wolf dragon = (Wolf) entity.getWorld().spawnEntity(entity.getLocation(), EntityType.WOLF);
 		dragon.setMetadata("wolfType", new FixedMetadataValue(plugin, "dragon"));
@@ -290,7 +290,7 @@ public class Main extends JavaPlugin implements Listener {
 		dragonRide.setCollidable(false);
 		dragonRide.setSilent(true);
 		dragonRide.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1000000, 1, true));
-		dragonRide.setPassenger(dragon);
+		dragonRide.addPassenger(dragon);
 	}
 
 	@EventHandler
@@ -345,86 +345,86 @@ public class Main extends JavaPlugin implements Listener {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void wolfImmunities(EntityDamageEvent e) {
 		LivingEntity entity = (LivingEntity) e.getEntity();
 		EntityDamageEvent.DamageCause cause = e.getCause();
-		LivingEntity passenger = (LivingEntity) entity.getPassenger();
-		double damage = e.getDamage();
-		if(entity.hasMetadata("wolfType")) {
-			for(MetadataValue metadata : entity.getMetadata("wolfType")) {
-				if(metadata.asString().equals("poison")) {
-					if(cause == EntityDamageEvent.DamageCause.POISON) {
-						e.setCancelled(true);
-					}
-					continue;
-				} 
-				if(metadata.asString().equals("fire")) {
-					if(cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.HOT_FLOOR || cause == EntityDamageEvent.DamageCause.LAVA || cause == EntityDamageEvent.DamageCause.MELTING) {
-						e.setCancelled(true);
-					}
-					continue;
-				} 
-				if(metadata.asString().equals("wither")) {
-					if(cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || cause == EntityDamageEvent.DamageCause.WITHER) {
-						e.setCancelled(true);
-					}
-					continue;
-				} 
-				if(metadata.asString().equals("troll")) {
-					if(cause == EntityDamageEvent.DamageCause.DROWNING || cause == EntityDamageEvent.DamageCause.FALL || cause == EntityDamageEvent.DamageCause.FALLING_BLOCK || cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.LAVA || cause == EntityDamageEvent.DamageCause.MELTING || cause == EntityDamageEvent.DamageCause.THORNS) {
-						e.setCancelled(true);
-					}
-					continue;
-				} 
-				if(metadata.asString().equals("shulker")) {
-					if(cause == EntityDamageEvent.DamageCause.FALL || cause == EntityDamageEvent.DamageCause.SUFFOCATION) {
-						e.setCancelled(true);
-					}
-					continue;
-				} 
-				if(metadata.asString().equals("fireball")) {
-					if(cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.HOT_FLOOR || cause == EntityDamageEvent.DamageCause.LAVA || cause == EntityDamageEvent.DamageCause.MELTING) {
-						e.setCancelled(true);
-					}
-					continue;
-				} 
-				if(metadata.asString().equals("teleport")) {
-					if(cause == EntityDamageEvent.DamageCause.FALL) {
-						e.setCancelled(true);
-					}
-					continue;
-				} 
-				if(metadata.asString().equals("dragon")) {
-					if(cause == EntityDamageEvent.DamageCause.DRAGON_BREATH || cause == EntityDamageEvent.DamageCause.FALL || cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.LAVA || cause == EntityDamageEvent.DamageCause.MAGIC || cause == EntityDamageEvent.DamageCause.MELTING || cause == EntityDamageEvent.DamageCause.SUFFOCATION) {
-						e.setCancelled(true);
-					}
-					continue;
-				} 
-				if(metadata.asString().equals("dragonRide")) {
-					if(cause == EntityDamageEvent.DamageCause.DRAGON_BREATH || cause == EntityDamageEvent.DamageCause.FALL || cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.LAVA || cause == EntityDamageEvent.DamageCause.MAGIC || cause == EntityDamageEvent.DamageCause.MELTING || cause == EntityDamageEvent.DamageCause.SUFFOCATION) {
-						e.setCancelled(true);
+		if(entity.getPassengers().size() > 0) {
+			LivingEntity passenger = (LivingEntity) entity.getPassengers().get(0);
+			double damage = e.getDamage();
+			if(entity.hasMetadata("wolfType")) {
+				for(MetadataValue metadata : entity.getMetadata("wolfType")) {
+					if(metadata.asString().equals("poison")) {
+						if(cause == EntityDamageEvent.DamageCause.POISON) {
+							e.setCancelled(true);
+						}
 						continue;
 					} 
-					if(passenger != null) {
-						e.setCancelled(true);
-						passenger.damage(damage);
+					if(metadata.asString().equals("fire")) {
+						if(cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.HOT_FLOOR || cause == EntityDamageEvent.DamageCause.LAVA || cause == EntityDamageEvent.DamageCause.MELTING) {
+							e.setCancelled(true);
+						}
+						continue;
+					} 
+					if(metadata.asString().equals("wither")) {
+						if(cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || cause == EntityDamageEvent.DamageCause.WITHER) {
+							e.setCancelled(true);
+						}
+						continue;
+					} 
+					if(metadata.asString().equals("troll")) {
+						if(cause == EntityDamageEvent.DamageCause.DROWNING || cause == EntityDamageEvent.DamageCause.FALL || cause == EntityDamageEvent.DamageCause.FALLING_BLOCK || cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.LAVA || cause == EntityDamageEvent.DamageCause.MELTING || cause == EntityDamageEvent.DamageCause.THORNS) {
+							e.setCancelled(true);
+						}
+						continue;
+					} 
+					if(metadata.asString().equals("shulker")) {
+						if(cause == EntityDamageEvent.DamageCause.FALL || cause == EntityDamageEvent.DamageCause.SUFFOCATION) {
+							e.setCancelled(true);
+						}
+						continue;
+					} 
+					if(metadata.asString().equals("fireball")) {
+						if(cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.HOT_FLOOR || cause == EntityDamageEvent.DamageCause.LAVA || cause == EntityDamageEvent.DamageCause.MELTING) {
+							e.setCancelled(true);
+						}
+						continue;
+					} 
+					if(metadata.asString().equals("teleport")) {
+						if(cause == EntityDamageEvent.DamageCause.FALL) {
+							e.setCancelled(true);
+						}
+						continue;
+					} 
+					if(metadata.asString().equals("dragon")) {
+						if(cause == EntityDamageEvent.DamageCause.DRAGON_BREATH || cause == EntityDamageEvent.DamageCause.FALL || cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.LAVA || cause == EntityDamageEvent.DamageCause.MAGIC || cause == EntityDamageEvent.DamageCause.MELTING || cause == EntityDamageEvent.DamageCause.SUFFOCATION) {
+							e.setCancelled(true);
+						}
+						continue;
+					} 
+					if(metadata.asString().equals("dragonRide")) {
+						if(cause == EntityDamageEvent.DamageCause.DRAGON_BREATH || cause == EntityDamageEvent.DamageCause.FALL || cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.LAVA || cause == EntityDamageEvent.DamageCause.MAGIC || cause == EntityDamageEvent.DamageCause.MELTING || cause == EntityDamageEvent.DamageCause.SUFFOCATION) {
+							e.setCancelled(true);
+							continue;
+						} 
+						if(passenger != null) {
+							e.setCancelled(true);
+							passenger.damage(damage);
+						} 
 					} 
 				} 
-			} 
+			}
 		}
 	}
 
 	@EventHandler
 	public void wolfAgro(final EntityTargetLivingEntityEvent e) {
 		if(!e.getEntityType().equals(EntityType.EXPERIENCE_ORB)) {
-			final LivingEntity entity = (LivingEntity)e.getEntity();
+			final LivingEntity entity = (LivingEntity) e.getEntity();
 			final LivingEntity target = e.getTarget();
 			if(entity.hasMetadata("wolfType")) {
 				for(final MetadataValue metadata : entity.getMetadata("wolfType")) {
 					(new BukkitRunnable() {
-						@SuppressWarnings("deprecation")
 						public void run() {
 							if(!entity.isDead() && !target.isDead() && entity.getLocation().distance(target.getLocation()) <= 20.0D && entity instanceof Wolf && !((Wolf) entity).isSitting()) {
 								if(entity.hasLineOfSight(target)) {
@@ -481,8 +481,8 @@ public class Main extends JavaPlugin implements Listener {
 								}
 							}
 							else if(!entity.isDead() && !target.isDead() && entity.getLocation().distance(target.getLocation()) <= 20.0D && entity instanceof Vex) {
-								if(metadata.asString().equals("dragonRide")) {
-									if(!((Wolf)entity.getPassenger()).getTarget().equals(((Vex)entity).getTarget())) {
+								if(metadata.asString().equals("dragonRide") && entity.getPassengers().size() > 0) {
+									if(!((Wolf) entity.getPassengers().get(0)).getTarget().equals(((Vex)entity).getTarget())) {
 										e.setCancelled(true);
 									}
 								}

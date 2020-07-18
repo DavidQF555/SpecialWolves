@@ -1,6 +1,7 @@
 name: SpecialWolves
 main: com.david.specialwolves.Main
 version: 2
+api-version: 1.15
 commands:
     wolf:
       description: Spawns a Special Wolf.

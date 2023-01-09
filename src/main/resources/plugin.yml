@@ -2,6 +2,6 @@ name: SpecialWolves
 main: com.david.specialwolves.Main
 version: 2
 commands:
-    wolf:
-      description: Spawns a Special Wolf.
-      usage: /<command>
+  wolf:
+    description: Spawns a Special Wolf.
+    usage: /<command>

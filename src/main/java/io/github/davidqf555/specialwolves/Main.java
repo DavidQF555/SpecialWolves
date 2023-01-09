@@ -1,4 +1,4 @@
-package com.david.specialwolves;
+package io.github.davidqf555.specialwolves;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

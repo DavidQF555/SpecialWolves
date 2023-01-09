@@ -1,5 +1,5 @@
 name: SpecialWolves
-main: com.david.specialwolves.Main
+main: io.github.davidqf555.specialwolves.Main
 version: 2
 commands:
   wolf:
